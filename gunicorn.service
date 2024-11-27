@@ -1,0 +1,14 @@
+[Unit]
+Description=fastapi service
+After=network.target
+
+[Service]
+User=crescent
+Group=crescent
+WorkingDirectory=/home/crescent/FastAPI/src
+Environment="PATH=/home/crescent/FastAPI/src/venv/bin"
+EnvironmentFile=/home/crescent/FastAPI/.env
+ExecStart=/home/crescent/FastAPI/src/venv/bin/gunicorn -w 1 -k uvicorn.workers.UvicornWorker apps.main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
