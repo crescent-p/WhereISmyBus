@@ -1,7 +1,8 @@
 from fastapi import  FastAPI, status
 from apps import models
 from apps.database import engine
-from apps.routers import students, locations, auth
+from apps.routers import students, auth
+from apps.routers.location import locations
 
 
 ##setting up the database. Creating the table and all
@@ -24,8 +25,8 @@ async def test():
     return {"message": "all good boi!!"}
 
 app.include_router(locations.router)
-app.include_router(students.router)
-app.include_router(auth.router)
+# app.include_router(students.router)
+# app.include_router(auth.router)
 
 
 
