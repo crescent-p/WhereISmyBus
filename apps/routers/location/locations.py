@@ -30,6 +30,7 @@ allowed_time = 1500 # seconds
 busArray: List[BusArrayEntry] = []
 
 
+#if inside parking space add extra time delay
 
 async def remove_redundant_buses():
     while True:
@@ -41,7 +42,7 @@ async def remove_redundant_buses():
         if busArray:
             for bus in busArray:
                 confidence = bus.confidence
-                elapsed_time = datetime.now() - bus.last_updated
+                elapsed_time = datetime.now() - datetime.fromisoformat(bus.last_updated)
                 if elapsed_time.total_seconds() > confidence * allowed_time:
                     busArray.remove(bus)
             redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))  
