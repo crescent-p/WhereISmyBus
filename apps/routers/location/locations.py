@@ -35,17 +35,20 @@ async def remove_redundant_buses():
     while True:
         busArrayjson = redis.get("busarray")
         if busArrayjson:
-            busArray = json.loads(busArrayjson)
+            busArray: List[BusArrayEntry] = [BusArrayEntry(**bus) for bus in json.loads(busArrayjson)]
+        else:
+            busArray: List[BusArrayEntry] = []
+        if busArray:
             for bus in busArray:
-                confidence = bus['confidence']
-                elapsed_time = datetime.now() - datetime.fromisoformat(bus['last_updated'])
+                confidence = bus.confidence
+                elapsed_time = datetime.now() - bus.last_updated
                 if elapsed_time.total_seconds() > confidence * allowed_time:
                     busArray.remove(bus)
-            redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))
+            redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))  
         await asyncio.sleep(15)
 
 # Start the background task
-# asyncio.create_task(remove_redundant_buses())
+asyncio.create_task(remove_redundant_buses())
 
 
 
