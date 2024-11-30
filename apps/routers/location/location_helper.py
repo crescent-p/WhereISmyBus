@@ -34,12 +34,14 @@ class BusArrayEntry:
         last_updated: datetime, 
         contributors: Set[Contributor], 
         no_of_contributors: int,
+        location: str,
         confidence: float, 
         name: str = "Unknown"
     ):
         self.latitude = latitude
         self.longitude = longitude
         self.speed = speed
+        self.location = location
         self.created_at = created_at
         self.last_updated = last_updated
         self.contributors = set(contributors) if contributors is not None else set()
@@ -52,6 +54,7 @@ class BusArrayEntry:
             "latitude": self.latitude,
             "longitude": self.longitude,
             "speed": self.speed,
+            "location": self.location,
             "created_at": self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at,
             "last_updated": self.last_updated.isoformat() if isinstance(self.last_updated, datetime) else self.last_updated,  # Convert datetime to ISO format
             "contributors": [str(contrib) for contrib in self.contributors],  # List of dicts
@@ -66,6 +69,7 @@ class BusArrayEntry:
             latitude=data["latitude"],
             longitude=data["longitude"],
             speed=data["speed"],
+            location=data["locations"],
             created_at=datetime.fromisoformat(data["created_at"]),
             contributors={contrib for contrib in data["contributors"]},
             last_updated=datetime.fromisoformat(data["last_updated"]),

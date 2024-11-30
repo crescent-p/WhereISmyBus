@@ -9,7 +9,7 @@ from apps import schemas
 from apps.algorithms import calculate_distance
 # from apps.routers.location.location_classes import BusArrayEntry, Contributor, DistIndex
 from apps.routers.location.JWTDecoder import verify_token
-from apps.routers.location.location_helper import BusArrayEntry, Contributor, Coordinates, DistIndex, isInParkingArea, isInside, nameResolve
+from apps.routers.location.location_helper import BusArrayEntry, Contributor, Coordinates, DistIndex, find_closest_location, isInParkingArea, isInside, nameResolve
 from apps.schemas import Bus, BusList
 from ... import models
 from ...database import get_db, get_redis
@@ -44,9 +44,9 @@ async def remove_redundant_buses():
         if busArray:
             for bus in busArray:
                 allowed_time = 1500
-                possbileName = nameResolve(Coordinates(latitude=bus.latitude, longitude=bus.longitude))
-                if bus.name == "Unknown":
-                    bus.name = possbileName
+                possibleName = nameResolve(Coordinates(latitude=bus.latitude, longitude=bus.longitude))
+                if possibleName != "Unknown":
+                    bus.name = possibleName
                 if isInParkingArea(coordinate=Coordinates(bus.latitude, bus.longitude)):
                     allowed_time = 3000
                 #Sigmoid fucntion to scale up on increased confidence, rises slowly and then very fast.
@@ -142,6 +142,7 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
             last_updated=datetime.now(),
             contributors={str(decoded_token["sub"])},
             no_of_contributors=1,
+            location=find_closest_location(Coordinates(latitude=location.latitude, longitude=location.longitude)),
             confidence=1,
             name="Unknown"
         )
@@ -154,6 +155,7 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         busArray[index].longitude = location.longitude
         busArray[index].last_updated = datetime.now()
         busArray[index].speed = location.speed
+        busArray[index].location = find_closest_location(Coordinates(location.latitude, location.longitude))
         busArray[index].contributors.add(str(decoded_token["sub"]))
         busArray[index].no_of_contributors = len(busArray[index].contributors) 
         

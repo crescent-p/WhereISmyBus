@@ -36,6 +36,7 @@ class Bus(BaseModel):
     last_updated: datetime
     created_at: datetime
     no_of_contributors: int
+    location: str
     name: str
     confidence: float
 
