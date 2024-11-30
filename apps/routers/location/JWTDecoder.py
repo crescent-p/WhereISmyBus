@@ -1,6 +1,5 @@
 import json
 import base64
-from jwt import ExpiredSignatureError
 import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_der_public_key
@@ -49,9 +48,6 @@ def verify_token(token):
                 options={"verify_exp": False},
             )
             return payload  # Contains user info like email, name, etc.
-        except ExpiredSignatureError:
-            print("Token has expired")
-            return None
         except exceptions.InvalidTokenError as e:
             print("Invalid token:", str(e))
             return None
