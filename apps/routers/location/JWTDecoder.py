@@ -48,7 +48,7 @@ def verify_token(token):
                 options={"verify_exp": False},
             )
             return payload  # Contains user info like email, name, etc.
-        except jwt.exceptions.InvalidTokenError as e:
+        except Exception as e:
             print("Invalid token:", str(e))
             return None
     except Exception as e:
