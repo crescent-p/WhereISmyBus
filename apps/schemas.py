@@ -11,7 +11,7 @@ class Token(BaseModel):
 
 
 class Authenticated(BaseModel):
-    secret: str
+    message: str
 
 class User(BaseModel):
     id: int
@@ -25,7 +25,7 @@ class LocationData(BaseModel):
     latitude: float
     longitude: float
     speed: float
-    datetime: datetime
+    # datetime: datetime
     location_accuracy: float
     satelite_count: int
 
@@ -34,6 +34,7 @@ class Bus(BaseModel):
     longitude: float
     speed: float
     last_updated: datetime
+    created_at: datetime
     no_of_contributors: int
     name: str
     confidence: float

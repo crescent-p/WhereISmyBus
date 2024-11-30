@@ -2,13 +2,14 @@ from cmath import sqrt
 from datetime import datetime, time
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Response, status, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from apps import schemas
 from apps.algorithms import calculate_distance
 # from apps.routers.location.location_classes import BusArrayEntry, Contributor, DistIndex
 from apps.routers.location.JWTDecoder import verify_token
-from apps.routers.location.location_helper import BusArrayEntry, Contributor, Coordinates, DistIndex, isInside
+from apps.routers.location.location_helper import BusArrayEntry, Contributor, Coordinates, DistIndex, isInParkingArea, isInside, nameResolve
 from apps.schemas import Bus, BusList
 from ... import models
 from ...database import get_db, get_redis
@@ -43,8 +44,13 @@ async def remove_redundant_buses():
         if busArray:
             for bus in busArray:
                 allowed_time = 1500
-                if isInside(point=Coordinates(bus.latitude, bus.longitude), )
-                confidence = bus.confidence
+                possbileName = nameResolve(Coordinates(latitude=bus.latitude, longitude=bus.longitude))
+                if bus.name == "Unknown":
+                    bus.name = possbileName
+                if isInParkingArea(coordinate=Coordinates(bus.latitude, bus.longitude)):
+                    allowed_time = 3000
+                #Sigmoid fucntion to scale up on increased confidence, rises slowly and then very fast.
+                confidence = 1/(1 + pow(25, -7*((bus.confidence/100) - 0.2)))
                 elapsed_time = datetime.now() - datetime.fromisoformat(bus.last_updated)
                 if elapsed_time.total_seconds() > confidence * allowed_time:
                     busArray.remove(bus)
@@ -54,13 +60,12 @@ async def remove_redundant_buses():
 # Start the background task
 asyncio.create_task(remove_redundant_buses())
 
-
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get('/', status_code=status.HTTP_200_OK, response_model=schemas.BusList)
-async def get_bus_locations(token: schemas.Token, redis: Session = Depends(get_redis)):
-
+async def get_bus_locations(token:str = Depends(oauth2_scheme), redis: Session = Depends(get_redis)):
     try:
-        decoded_token = verify_token(token=token.token)
+        decoded_token = verify_token(token=token)
         if not decoded_token:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
     except Exception as e:
@@ -93,13 +98,30 @@ async def get_bus_locations(token: schemas.Token, redis: Session = Depends(get_r
 
 
 @router.post('/', status_code=status.HTTP_200_OK, response_model=schemas.UpdatedLocation)
-async def set_bus_locations(location: schemas.LocationData, redis: Session = Depends(get_redis)):
+async def set_bus_locations(location: schemas.LocationData, redis: Session = Depends(get_redis), db: Session = Depends(get_db)):
     try:
         decoded_token = verify_token(token=location.token)
         if not decoded_token:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+    
+    print(decoded_token)
+    query = db.query(models.Users).where(models.Users.sub == decoded_token["sub"])
+    if not query.first():
+        new_user = models.Users()
+        new_user.name = decoded_token["name"]
+        new_user.picture = decoded_token["picture"]
+        new_user.created_at = datetime.now()
+        new_user.last_accessed = datetime.now()
+        new_user.sub = decoded_token["sub"]
+        new_user.email = decoded_token["email"]
+        db.add(new_user)
+        db.commit()
+    else:
+        query_res = query.first()
+        query_res.last_accessed = datetime.now()
+        db.commit()
 
     busArrayjson = redis.get("busarray")
     if busArrayjson:
@@ -119,8 +141,9 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
             latitude=location.latitude,
             longitude=location.longitude,
             speed=location.speed,
+            created_at= datetime.now(),
             last_updated=datetime.now(),
-            contributors={decoded_token["sub"]},
+            contributors={str(decoded_token["sub"])},
             no_of_contributors=1,
             confidence=1,
             name="Unknown"
@@ -134,7 +157,7 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         busArray[index].longitude = location.longitude
         busArray[index].last_updated = datetime.now()
         busArray[index].speed = location.speed
-        busArray[index].contributors.add(str(location.uuid))
+        busArray[index].contributors.add(str(decoded_token["sub"]))
         busArray[index].no_of_contributors = len(busArray[index].contributors) 
         
 

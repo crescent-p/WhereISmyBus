@@ -7,12 +7,12 @@ from sqlalchemy import func, Interval
 
 class Users(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, nullable=False)
+    sub = Column(String, primary_key=True, nullable=False)
     email = Column(String, nullable=True, unique=False)
     name = Column(String, nullable=True)
     created_at = Column(TIMESTAMP(timezone= True), server_default=text('now()'), nullable=False)
-    last_accessed = Column(TIMESTAMP(timezone=True), nullable= True)
-
+    last_accessed = Column(TIMESTAMP(timezone=True), server_default=text('now()'), nullable= True)
+    picture = Column(String, nullable=True)
 
 
 # class Admin(Base):

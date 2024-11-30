@@ -26,7 +26,7 @@ async def test():
 
 app.include_router(locations.router)
 # app.include_router(students.router)
-# app.include_router(auth.router)
+app.include_router(auth.router)
 
 
 
