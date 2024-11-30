@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from apps import schemas
 from apps.algorithms import calculate_distance
 # from apps.routers.location.location_classes import BusArrayEntry, Contributor, DistIndex
-from apps.routers.location.location_classes import BusArrayEntry, Contributor, DistIndex
+from apps.routers.location.JWTDecoder import verify_token
+from apps.routers.location.location_helper import BusArrayEntry, Contributor, Coordinates, DistIndex, isInside
 from apps.schemas import Bus, BusList
 from ... import models
 from ...database import get_db, get_redis
@@ -41,6 +42,8 @@ async def remove_redundant_buses():
             busArray: List[BusArrayEntry] = []
         if busArray:
             for bus in busArray:
+                allowed_time = 1500
+                if isInside(point=Coordinates(bus.latitude, bus.longitude), )
                 confidence = bus.confidence
                 elapsed_time = datetime.now() - datetime.fromisoformat(bus.last_updated)
                 if elapsed_time.total_seconds() > confidence * allowed_time:
@@ -54,7 +57,14 @@ asyncio.create_task(remove_redundant_buses())
 
 
 @router.get('/', status_code=status.HTTP_200_OK, response_model=schemas.BusList)
-async def get_bus_locations(secret: str, redis: Session = Depends(get_redis)):
+async def get_bus_locations(token: schemas.Token, redis: Session = Depends(get_redis)):
+
+    try:
+        decoded_token = verify_token(token=token.token)
+        if not decoded_token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
 
     #check if present in redis
     cache = redis.get("buslist")
@@ -83,7 +93,13 @@ async def get_bus_locations(secret: str, redis: Session = Depends(get_redis)):
 
 
 @router.post('/', status_code=status.HTTP_200_OK, response_model=schemas.UpdatedLocation)
-async def set_bus_locations(secret: str, location: schemas.LocationData, redis: Session = Depends(get_redis)):
+async def set_bus_locations(location: schemas.LocationData, redis: Session = Depends(get_redis)):
+    try:
+        decoded_token = verify_token(token=location.token)
+        if not decoded_token:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
 
     busArrayjson = redis.get("busarray")
     if busArrayjson:
@@ -104,7 +120,7 @@ async def set_bus_locations(secret: str, location: schemas.LocationData, redis: 
             longitude=location.longitude,
             speed=location.speed,
             last_updated=datetime.now(),
-            contributors={str(location.uuid)},
+            contributors={decoded_token["sub"]},
             no_of_contributors=1,
             confidence=1,
             name="Unknown"

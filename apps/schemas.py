@@ -6,11 +6,21 @@ from pydantic import BaseModel, EmailStr, conint
 class UpdatedLocation(BaseModel):
     message: str
 
+class Token(BaseModel):
+    token: str
+
 
 class Authenticated(BaseModel):
     secret: str
 
+class User(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+    photo_url: str
+
 class LocationData(BaseModel):
+    token: str
     uuid: str
     latitude: float
     longitude: float
@@ -75,12 +85,11 @@ class BusList(BaseModel):
 #     email: EmailStr
 #     password: str
 
-# class Token(BaseModel):
-#     token: str
-#     token_type: str
+class Token(BaseModel):
+    token: str
 
-# class TokenData(BaseModel):
-#     id: Optional[int] = None
+class TokenData(BaseModel):
+    id: Optional[int] = None
 
 # class Vote(BaseModel):
 #     post_id: int

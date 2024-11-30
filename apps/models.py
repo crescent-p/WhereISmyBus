@@ -8,10 +8,10 @@ from sqlalchemy import func, Interval
 class Users(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, nullable=False)
-    uuid = Column(String, nullable=False, unique=True)
-    name = Column(String,)
-    gender = Column(Integer, default=0) #1 for male, -1 for female
+    email = Column(String, nullable=True, unique=False)
+    name = Column(String, nullable=True)
     created_at = Column(TIMESTAMP(timezone= True), server_default=text('now()'), nullable=False)
+    last_accessed = Column(TIMESTAMP(timezone=True), nullable= True)
 
 
 
