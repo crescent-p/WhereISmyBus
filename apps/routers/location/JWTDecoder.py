@@ -1,9 +1,8 @@
 import json
 import base64
-import jwt
+from jwt import encode, decode
 import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives.serialization import load_der_public_key
 from cryptography.hazmat.primitives import serialization
 
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
@@ -39,7 +38,7 @@ def verify_token(token):
         
         try:
             # Decode and verify the token
-            payload = jwt.decode(
+            payload = decode(
                 token,
                 public_key_pem,
                 algorithms=["RS256"],
