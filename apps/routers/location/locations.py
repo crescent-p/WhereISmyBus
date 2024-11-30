@@ -57,9 +57,6 @@ async def remove_redundant_buses():
             redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))  
         await asyncio.sleep(15)
 
-# Start the background task
-asyncio.create_task(remove_redundant_buses())
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get('/', status_code=status.HTTP_200_OK, response_model=schemas.BusList)

@@ -1,9 +1,11 @@
+import asyncio
 from fastapi import  FastAPI, status
 from apps import models
 from apps.database import engine
 from apps.routers import students, auth
 from apps.routers.location import locations
 
+from apps.routers.location.locations import remove_redundant_buses
 
 ##setting up the database. Creating the table and all
 models.Base.metadata.create_all(bind=engine)
@@ -23,6 +25,12 @@ app.add_middleware(
 @app.get('/', status_code=status.HTTP_200_OK)
 async def test():
     return {"message": "all good boi!!"}
+
+
+@app.on_event("startup")
+async def startup_event():
+    # Schedule the coroutine on startup
+    asyncio.create_task(remove_redundant_buses())
 
 app.include_router(locations.router)
 # app.include_router(students.router)
