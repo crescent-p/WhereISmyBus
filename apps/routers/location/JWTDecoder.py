@@ -1,6 +1,6 @@
 import json
 import base64
-from jose import ExpiredSignatureError
+from jwt import ExpiredSignatureError
 import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_der_public_key
