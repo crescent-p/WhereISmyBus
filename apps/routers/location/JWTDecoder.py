@@ -1,10 +1,10 @@
 import json
 import base64
+import jwt
 import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_der_public_key
 from cryptography.hazmat.primitives import serialization
-from jwt import decode, exceptions
 
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 CLIENT_ID = "442072746362-s30fj5ovvkp8ags8d0s8h658t4actmo9.apps.googleusercontent.com"
@@ -39,7 +39,7 @@ def verify_token(token):
         
         try:
             # Decode and verify the token
-            payload = decode(
+            payload = jwt.decode(
                 token,
                 public_key_pem,
                 algorithms=["RS256"],
@@ -48,7 +48,7 @@ def verify_token(token):
                 options={"verify_exp": False},
             )
             return payload  # Contains user info like email, name, etc.
-        except exceptions.InvalidTokenError as e:
+        except jwt.exceptions.InvalidTokenError as e:
             print("Invalid token:", str(e))
             return None
     except Exception as e:
