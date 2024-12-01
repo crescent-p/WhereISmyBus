@@ -1,3 +1,5 @@
+
+
 from cmath import sqrt
 from datetime import datetime, time
 from typing import List, Optional
@@ -16,13 +18,14 @@ from ...database import get_db, get_redis
 import asyncio
 import json
 from ...database import r as redis
-
 router = APIRouter(prefix="/locations", tags=['locations'])
 
 # an array of objects A
 # A -> has latitude longitude 
 from datetime import datetime
-from typing import Set
+from typing import List, Set
+
+from apps.routers.location.location_helper import BusArrayEntry, Coordinates, DistIndex, find_closest_location, isInParkingArea, isInsideBuilding, isInsideNITC, nameResolve
 
 
 
@@ -49,6 +52,7 @@ async def remove_redundant_buses():
                     bus.name = possibleName
                 if isInParkingArea(coordinate=Coordinates(bus.latitude, bus.longitude)):
                     allowed_time = 3000
+                    bus.contributors.clear()
                 #Sigmoid fucntion to scale up on increased confidence, rises slowly and then very fast.
                 confidence = 1/(1 + pow(25, -7*((bus.confidence/100) - 0.2)))
                 elapsed_time = datetime.now() - datetime.fromisoformat(bus.last_updated)
@@ -103,7 +107,6 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
     
-    print(decoded_token)
     query = db.query(models.Users).where(models.Users.sub == decoded_token["sub"])
     if not query.first():
         new_user = models.Users()
@@ -120,6 +123,12 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         query_res.last_accessed = datetime.now()
         db.commit()
 
+    coordinate = Coordinates(latitude=location.latitude, longitude=location.longitude)
+
+    if not isInsideNITC(coordinate= coordinate) or location.speed < 3 or isInsideBuilding(coordinate=coordinate):
+        
+        return {"message" : "Doesn't meet criteria to upload the location"}
+
     busArrayjson = redis.get("busarray")
     if busArrayjson:
         busArray: List[BusArrayEntry] = [BusArrayEntry(**bus) for bus in json.loads(busArrayjson)]
@@ -130,8 +139,12 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
     for index, i in enumerate(busArray):
         dist = calculate_distance(latitude1=location.latitude, longitude1=location.longitude,
                                   latitude2=i.latitude, longitude2=i.longitude)
+        previous_contributor = False
+        if str(decoded_token["sub"]) in i.contributors:
+            previous_contributor = True
+ 
         if dist < 200:
-            possibleLocation.append(DistIndex(dist=dist, index=index))
+            possibleLocation.append(DistIndex(dist=dist, index=index, previous_contributor=previous_contributor))
 
     if not possibleLocation:
         entry = BusArrayEntry(
@@ -150,6 +163,12 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
     else:
         possibleLocation.sort(key=lambda x: x.dist)
         index: int = possibleLocation[0].index
+
+        for item in possibleLocation:
+            if item.previous_contributor:
+                index = item.index
+                break
+
         busArray[index].confidence += 1
         busArray[index].latitude = location.latitude
         busArray[index].longitude = location.longitude

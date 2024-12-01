@@ -3,6 +3,8 @@ import json
 from typing import List, Set
 from math import radians, cos, sin, sqrt, atan2
 
+from apps.algorithms import calculate_distance
+
 
 class Coordinates:
     def __init__(self, latitude: float, longitude: float):
@@ -81,9 +83,51 @@ class BusArrayEntry:
 class DistIndex:
         dist: float
         index: int
-        def __init__(self, dist: float, index: int):
+        previous_contributor: bool
+        def __init__(self, dist: float, index: int, previous_contributor: bool):
             self.dist = dist
             self.index = index
+            self.previous_contributor = previous_contributor
+
+import json
+
+file = open("/home/crescent-p/WhereISmyBus/apps/data/point_data_nitc.geojson", mode='r')
+jsonFormat = json.load(file)
+
+
+pointLocations = {}
+
+for location in jsonFormat["features"]:
+    try:
+        if location["properties"]["name"]:
+            pointLocations[Coordinates(latitude=location["geometry"]["coordinates"][0],
+                        longitude=location["geometry"]["coordinates"][1])] = location["properties"]["name"]
+    except:
+        continue
+
+
+file1 = open("/home/crescent-p/WhereISmyBus/apps/data/polygon_data_nitc.geojson", mode='r')
+jsonFormat = json.load(file1)
+polygonLocations = []
+
+
+for building in jsonFormat["features"]:
+    listOfCoordinates = []
+    if str(building["geometry"]["type"]) != "Polygon":
+            continue
+    for coordiante in building["geometry"]["coordinates"][0]:
+        listOfCoordinates.append(Coordinates(latitude=coordiante[0],longitude=coordiante[1]))
+    polygonLocations.append(listOfCoordinates)
+
+
+
+SOMS: List[Coordinates] = [
+     Coordinates(11.313701390321768, 75.92981737369733),
+     Coordinates(11.315017696339446, 75.9313695175483),
+     Coordinates(11.313917347192696, 75.93274337460556),
+     Coordinates(11.312786142727894, 75.93076124495806)
+]
+
 
 
 
@@ -151,19 +195,19 @@ MainBuildingFront: List[Coordinates] = [
 ]
 
 
-parkingSpace: List[List[Coordinates]] = [LH, MBH, ChemicalBuilding, MainBuildingFront]
+parkingSpace: List[List[Coordinates]] = [LH, MBH, ChemicalBuilding, MainBuildingFront, SOMS]
 
 def isInside(point: Coordinates, polygon: List[Coordinates]) -> bool:
     x, y = point.latitude, point.longitude
     n = len(polygon)
     inside = False
-
+    
     p1x, p1y = polygon[0].latitude, polygon[0].longitude
     for i in range(n + 1):
         p2x, p2y = polygon[i % n].latitude, polygon[i % n].longitude
         if y > min(p1y, p2y):
             if y <= max(p1y, p2y):
-                if x <= max(p1x, p2x):
+                if x <= max(p1x, p2x): 
                     if p1y != p2y:
                         xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
                     if p1x == p2x or x <= xinters:
@@ -175,9 +219,21 @@ def isInside(point: Coordinates, polygon: List[Coordinates]) -> bool:
 
 def isInParkingArea(coordinate: Coordinates):
     for area in parkingSpace:
-        if isInside(coordinate, area):
+        if isInside(point=coordinate,polygon=area):
             return True
     return False
+
+def isInsideBuilding(coordinate: Coordinates):
+    for area in polygonLocations:
+        if isInside(point= coordinate,polygon= area):
+            return True
+    return False
+
+def isInsideNITC(coordinate: Coordinates):
+    distance = calculate_distance(latitude1=11.319893740118783, longitude1= 75.93729064918259,latitude2=coordinate.latitude, longitude2=coordinate.longitude) 
+    if distance > 1000:
+        return False
+    return True
 
 map_from_coordinate_to_string = {
     Coordinates(11.321489, 75.934114): "Center Circle NITC",
@@ -193,7 +249,8 @@ map_from_coordinate_to_string = {
     Coordinates(11.319507, 75.937225): "C Gate",
     Coordinates(11.319773, 75.934481): "NITC Library",
     Coordinates(11.319804, 75.932136): "Main Canteen (Swadishtam)",
-    Coordinates(11.316699, 75.93063): "Ladies Hostel NITC",
+    Coordinates(11.316699, 75.930633): "Ladies Hostel NITC",
+    Coordinates(11.313859, 75.931000): "SOMS"
 }
 
 
@@ -207,22 +264,28 @@ def find_closest_location(coordinate: Coordinates) -> str:
         a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-        return R * c
+        return R * c * 1000
 
     closest_location = None
-    min_distance = float('inf')
+    min_distance = 200
 
     for loc in map_from_coordinate_to_string.keys():
         distance = haversine(coordinate.latitude, coordinate.longitude, loc.latitude, loc.longitude)
         if distance < min_distance:
             min_distance = distance
             closest_location = loc
+    for loc in pointLocations.keys():
+        distance = haversine(coordinate.latitude, coordinate.longitude, loc.latitude, loc.longitude)
+        if distance < min_distance:
+            min_distance = distance
+            closest_location = loc
+
 
     return map_from_coordinate_to_string[closest_location] if closest_location else "Unknown"
 
 
-LHBusLandMarks = ["Ladies Hostel NITC", "Main Canteen (Swadishtam)"]
-MBHLandMarks = ["NITC Library", "C Gate", "Mega Boys Hostel", "Mega Boys Hostel Gate", "Kattangal"]
+LHBusLandMarks = ["Ladies Hostel NITC", "Main Canteen (Swadishtam)", "SOMS", "Ladies Hostel", "MBA Hostel NIT", "NITC Guest House"]
+MBHLandMarks = ["NITC Library", "C Gate", "Mega Boys Hostel", "Mega Boys Hostel Gate", "Kattangal", "NIT mega hostel phase 2", "Mega Hostel Boys"]
 
 def nameResolve(coordinate: Coordinates) -> str:
     nameOfLandmark = find_closest_location(coordinate=coordinate)
@@ -233,3 +296,4 @@ def nameResolve(coordinate: Coordinates) -> str:
         return "MBH, Boys"
     else:
         return "Unknown"
+    

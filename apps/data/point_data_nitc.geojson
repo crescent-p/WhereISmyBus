@@ -1,0 +1,1547 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2024-12-01T05:44:57Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/5373846",
+        "building": "dormitory",
+        "name": "C Hostel",
+        "nohousenumber": "yes",
+        "type": "multipolygon",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9367809,
+          11.3200566
+        ]
+      },
+      "id": "relation/5373846"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/5373847",
+        "building": "dormitory",
+        "name": "F Hostel",
+        "type": "multipolygon",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9375535,
+          11.3208563
+        ]
+      },
+      "id": "relation/5373847"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/5373849",
+        "building": "dormitory",
+        "building:levels": "4",
+        "name": "G Hostel",
+        "type": "multipolygon",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9371469,
+          11.3216275
+        ]
+      },
+      "id": "relation/5373849"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/43018288",
+        "building": "yes",
+        "name": "Ladies Hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.930932,
+          11.3176513
+        ]
+      },
+      "id": "way/43018288"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/43018291",
+        "amenity": "ഭക്ഷണശാല ",
+        "building": "yes",
+        "cuisine": "indian",
+        "internet_access": "no",
+        "name": "Swadishtam Main Canteen",
+        "opening_hours": "0700 to 2100",
+        "smoking": "no",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9318939,
+          11.3198946
+        ]
+      },
+      "id": "way/43018291"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/97943462",
+        "building": "university",
+        "name": "Aryabhatta Auditorium",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9340769,
+          11.3208893
+        ]
+      },
+      "id": "way/97943462"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/98268087",
+        "building": "university",
+        "name": "ELHC",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.933752,
+          11.322594
+        ]
+      },
+      "id": "way/98268087"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/98277544",
+        "building": "dormitory",
+        "name": "B Hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9358616,
+          11.3203336
+        ]
+      },
+      "id": "way/98277544"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/98277545",
+        "building": "dormitory",
+        "name": "PG II Hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9358517,
+          11.3198975
+        ]
+      },
+      "id": "way/98277545"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/98277546",
+        "building": "dormitory",
+        "name": "E Hostel",
+        "nohousenumber": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9385037,
+          11.3196442
+        ]
+      },
+      "id": "way/98277546"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/98277548",
+        "building": "dormitory",
+        "name": "D Hostel",
+        "nohousenumber": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9376804,
+          11.31989
+        ]
+      },
+      "id": "way/98277548"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/206998405",
+        "building": "yes",
+        "name": "Architecture Block",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9368717,
+          11.3225319
+        ]
+      },
+      "id": "way/206998405"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/206998407",
+        "building": "university",
+        "name": "Main Building",
+        "nohousenumber": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.934231,
+          11.3216931
+        ]
+      },
+      "id": "way/206998407"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/206998408",
+        "building": "yes",
+        "building:levels": "2",
+        "name": "Department Building",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9348572,
+          11.3223274
+        ]
+      },
+      "id": "way/206998408"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977420",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9361758,
+          11.3222346
+        ]
+      },
+      "id": "way/360977420"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977421",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9340658,
+          11.3223371
+        ]
+      },
+      "id": "way/360977421"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977422",
+        "building": "retail",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9319494,
+          11.3200957
+        ]
+      },
+      "id": "way/360977422"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977423",
+        "building": "yes",
+        "name": "Administrative Block",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9322452,
+          11.3206523
+        ]
+      },
+      "id": "way/360977423"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977424",
+        "amenity": "cafe",
+        "building": "commercial",
+        "cuisine": "indian",
+        "internet_access": "no",
+        "name": "Sampthrupthi Mini Canteen",
+        "opening_hours": "0800 to 0100",
+        "smoking": "no",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9366264,
+          11.3207746
+        ]
+      },
+      "id": "way/360977424"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977425",
+        "building": "dormitory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9342494,
+          11.3200817
+        ]
+      },
+      "id": "way/360977425"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977426",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9332708,
+          11.3221901
+        ]
+      },
+      "id": "way/360977426"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977427",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9353536,
+          11.3231878
+        ]
+      },
+      "id": "way/360977427"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977428",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.935591,
+          11.3228233
+        ]
+      },
+      "id": "way/360977428"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977429",
+        "alt_name": "NLHC",
+        "building": "university",
+        "name": "NLHC",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9328708,
+          11.3217638
+        ]
+      },
+      "id": "way/360977429"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977430",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9359141,
+          11.3219151
+        ]
+      },
+      "id": "way/360977430"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977431",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9360589,
+          11.3232768
+        ]
+      },
+      "id": "way/360977431"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977432",
+        "building": "dormitory",
+        "internet_access": "wired",
+        "internet_access:fee": "no",
+        "name": "PG I Hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9350292,
+          11.3200348
+        ]
+      },
+      "id": "way/360977432"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977433",
+        "building": "university",
+        "name": "Central Computer Center",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9336188,
+          11.3215981
+        ]
+      },
+      "id": "way/360977433"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977434",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9342949,
+          11.3205144
+        ]
+      },
+      "id": "way/360977434"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977435",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9348974,
+          11.3227982
+        ]
+      },
+      "id": "way/360977435"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977436",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.931452,
+          11.3198242
+        ]
+      },
+      "id": "way/360977436"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977437",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.935083,
+          11.3210881
+        ]
+      },
+      "id": "way/360977437"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977438",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9350965,
+          11.3229749
+        ]
+      },
+      "id": "way/360977438"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977439",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9352927,
+          11.3224465
+        ]
+      },
+      "id": "way/360977439"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977440",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9344287,
+          11.3202865
+        ]
+      },
+      "id": "way/360977440"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977441",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9353768,
+          11.3218158
+        ]
+      },
+      "id": "way/360977441"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977442",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9340767,
+          11.320265
+        ]
+      },
+      "id": "way/360977442"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977443",
+        "building": "university",
+        "name": "Hydraulics Lab",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9355168,
+          11.3211425
+        ]
+      },
+      "id": "way/360977443"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977444",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9352861,
+          11.321859
+        ]
+      },
+      "id": "way/360977444"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977445",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9360774,
+          11.3210337
+        ]
+      },
+      "id": "way/360977445"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977446",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9306035,
+          11.3202197
+        ]
+      },
+      "id": "way/360977446"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977447",
+        "building": "yes",
+        "name": "Mechanical Lab",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.935977,
+          11.3215251
+        ]
+      },
+      "id": "way/360977447"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977448",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9356932,
+          11.321382
+        ]
+      },
+      "id": "way/360977448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977449",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9344133,
+          11.3208203
+        ]
+      },
+      "id": "way/360977449"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977450",
+        "building": "university",
+        "name": "Center for Career Development",
+        "website": "https://www.placement.nitc.ac.in/",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9351115,
+          11.3212613
+        ]
+      },
+      "id": "way/360977450"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977451",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9309205,
+          11.3200665
+        ]
+      },
+      "id": "way/360977451"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977452",
+        "building": "yes",
+        "name": "NITC Cooperative Store",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.931316,
+          11.3200526
+        ]
+      },
+      "id": "way/360977452"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977453",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9360588,
+          11.3219701
+        ]
+      },
+      "id": "way/360977453"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977454",
+        "building": "yes",
+        "name": "Auditorium",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9358619,
+          11.3224549
+        ]
+      },
+      "id": "way/360977454"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977455",
+        "building": "yes",
+        "name": "PG Block",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9350278,
+          11.3218275
+        ]
+      },
+      "id": "way/360977455"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977456",
+        "building": "yes",
+        "name": "BSNL Office",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9303918,
+          11.3201238
+        ]
+      },
+      "id": "way/360977456"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/360977457",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9328323,
+          11.3208261
+        ]
+      },
+      "id": "way/360977457"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/366413164",
+        "building": "office",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9316284,
+          11.3178116
+        ]
+      },
+      "id": "way/366413164"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/377868843",
+        "building": "yes",
+        "name": "Old Library Building",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9347276,
+          11.3221208
+        ]
+      },
+      "id": "way/377868843"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/377868844",
+        "building": "university",
+        "name": "IT Complex",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9341582,
+          11.3228792
+        ]
+      },
+      "id": "way/377868844"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/377870756",
+        "building": "yes",
+        "name": "Physics Department",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9382039,
+          11.323442
+        ]
+      },
+      "id": "way/377870756"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/377870758",
+        "building": "yes",
+        "name": "Chemistry Department",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9385854,
+          11.3235275
+        ]
+      },
+      "id": "way/377870758"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/377870759",
+        "building": "yes",
+        "name": "Mathematics Department",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9383165,
+          11.3238431
+        ]
+      },
+      "id": "way/377870759"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/400361366",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9351237,
+          11.3191838
+        ]
+      },
+      "id": "way/400361366"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/438389139",
+        "building": "dormitory",
+        "name": "Mega Hostel Boys",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9361276,
+          11.3175555
+        ]
+      },
+      "id": "way/438389139"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/438392293",
+        "building": "yes",
+        "name": "East Campus lecture complex",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9378808,
+          11.3226474
+        ]
+      },
+      "id": "way/438392293"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/712269405",
+        "building": "house",
+        "name": "Thottungal House",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9389168,
+          11.3136736
+        ]
+      },
+      "id": "way/712269405"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/712269406",
+        "amenity": "place_of_worship",
+        "building": "yes",
+        "name": "Asuralankavu Madham",
+        "religion": "hindu",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9389541,
+          11.3139539
+        ]
+      },
+      "id": "way/712269406"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/712269407",
+        "amenity": "place_of_worship",
+        "building": "yes",
+        "denomination": "jacobite",
+        "name": "St.Peter's Jacobite Congregation",
+        "religion": "christian",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9387898,
+          11.3134772
+        ]
+      },
+      "id": "way/712269407"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/760228569",
+        "amenity": "place_of_worship",
+        "building": "yes",
+        "denomination": "roman_catholic",
+        "name": "St.Josephs NIT Campus Church",
+        "religion": "christian",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9361009,
+          11.3239261
+        ]
+      },
+      "id": "way/760228569"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/804041823",
+        "building": "no",
+        "name": "Basketball Court",
+        "sport": "basketball",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9333838,
+          11.3213709
+        ]
+      },
+      "id": "way/804041823"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/832464853",
+        "building": "school",
+        "name": "Dayapuram Residential School",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.932464,
+          11.3243384
+        ]
+      },
+      "id": "way/832464853"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/845720444",
+        "amenity": "bus_station",
+        "building": "yes",
+        "bus": "yes",
+        "name": "kattangal bus station",
+        "public_transport": "station",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9399219,
+          11.3184728
+        ]
+      },
+      "id": "way/845720444"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/846709731",
+        "building": "school",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9295438,
+          11.3189946
+        ]
+      },
+      "id": "way/846709731"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/846709732",
+        "building": "school",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9297656,
+          11.3187326
+        ]
+      },
+      "id": "way/846709732"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/847452178",
+        "building": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9339782,
+          11.3191894
+        ]
+      },
+      "id": "way/847452178"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849154259",
+        "addr:city": "Kattangal",
+        "building": "dormitory",
+        "name": "NIT mega hostel phase 2",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9381399,
+          11.3169279
+        ]
+      },
+      "id": "way/849154259"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849156869",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "building": "yes",
+        "name": "Grama Panchayath Office",
+        "office": "government",
+        "operator:type": "revenue",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.939951,
+          11.3182734
+        ]
+      },
+      "id": "way/849156869"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849170510",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "building": "yes",
+        "name": "Cafe plus restaurant",
+        "was:amenity": "restaurant",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.939135,
+          11.3185588
+        ]
+      },
+      "id": "way/849170510"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849172659",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "building": "yes",
+        "name": "Kerala Gramin Bank",
+        "office": "financial",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.939751,
+          11.3188176
+        ]
+      },
+      "id": "way/849172659"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849174252",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "addr:street": "Kattangal-Koduvally Road",
+        "amenity": "restaurant",
+        "building": "yes",
+        "check_date": "2024-11-23",
+        "name": "Sweets Valley Bakery and Coolbar",
+        "opening_hours": "08:00-22:30",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9396982,
+          11.3186539
+        ]
+      },
+      "id": "way/849174252"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849178605",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "addr:street": "Kattangal-Mavoor Road",
+        "building": "yes",
+        "name": "Indico fashion",
+        "was:shop": "clothes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9394412,
+          11.3183024
+        ]
+      },
+      "id": "way/849178605"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849182020",
+        "addr:street": "Kattangal-Koduvally Road",
+        "building": "yes",
+        "name": "Upper LH NIT hostel",
+        "tourism": "hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9388173,
+          11.3227861
+        ]
+      },
+      "id": "way/849182020"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849182308",
+        "addr:street": "Kattangal-Koduvally Road",
+        "building": "yes",
+        "name": "Bottom LH Hostel NIT",
+        "tourism": "hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.938708,
+          11.3225241
+        ]
+      },
+      "id": "way/849182308"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849182495",
+        "addr:street": "kattangal-omassery road",
+        "building": "yes",
+        "name": "Maliyekkal Apartments",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9376883,
+          11.3240354
+        ]
+      },
+      "id": "way/849182495"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849182658",
+        "addr:street": "Kattangal-Koduvally Road",
+        "amenity": "place_of_worship",
+        "building": "yes",
+        "name": "Alqamar Mosque",
+        "religion": "muslim",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9357608,
+          11.324775
+        ]
+      },
+      "id": "way/849182658"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849187454",
+        "building": "dormitory",
+        "name": "MBA Hostel NIT",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.932531,
+          11.3152454
+        ]
+      },
+      "id": "way/849187454"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/849188643",
+        "addr:postcode": "673601",
+        "addr:street": "Kattangal-Mavoor Road",
+        "amenity": "restaurant",
+        "building": "yes",
+        "check_date": "2024-11-23",
+        "diet:halal": "yes",
+        "diet:non-vegetarian": "yes",
+        "name": "Chicken Park Restaurant",
+        "opening_hours": "12:00-23:00",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9393277,
+          11.3184778
+        ]
+      },
+      "id": "way/849188643"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/854156759",
+        "building": "dormitory",
+        "name": "A Hostel",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.934994,
+          11.3205081
+        ]
+      },
+      "id": "way/854156759"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/863096389",
+        "addr:city": "Kattangal",
+        "addr:postcode": "673601",
+        "building": "yes",
+        "government": "panchayath_office",
+        "name": "Panchayath Office, Chathamangalam",
+        "office": "government",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9397328,
+          11.3192205
+        ]
+      },
+      "id": "way/863096389"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/897873286",
+        "building": "yes",
+        "name": "Akshaya Centre, Kattangal",
+        "ref": "KZD133",
+        "source": "public_service",
+        "was:amenity": "internet_cafe",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9406724,
+          11.3187558
+        ]
+      },
+      "id": "way/897873286"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1334676686",
+        "addr:district": "Kozhikode",
+        "addr:postcode": "673601",
+        "addr:street": "Guest House Road",
+        "building": "yes",
+        "internet_access": "yes",
+        "name": "NITC Guest House",
+        "operator": "National Instituite of Technology",
+        "tourism": "guest_house",
+        "website": "https://nitc.ac.in/central-facilities/guest-house",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.9337578,
+          11.3181167
+        ]
+      },
+      "id": "way/1334676686"
+    }
+  ]
+}

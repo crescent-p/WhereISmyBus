@@ -1,3 +1,5 @@
+
+##setting up the database. Creating the table and all
 import asyncio
 from fastapi import  FastAPI, status
 from apps import models
@@ -7,7 +9,6 @@ from apps.routers.location import locations
 
 from apps.routers.location.locations import remove_redundant_buses
 
-##setting up the database. Creating the table and all
 models.Base.metadata.create_all(bind=engine)
 from fastapi.middleware.cors import CORSMiddleware
 
