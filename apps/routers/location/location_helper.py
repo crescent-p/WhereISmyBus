@@ -91,7 +91,7 @@ class DistIndex:
 
 import json
 
-file = open("/home/crescent-p/WhereISmyBus/apps/data/point_data_nitc.geojson", mode='r')
+file = open("apps/data/point_data_nitc.geojson", mode='r')
 jsonFormat = json.load(file)
 
 
@@ -106,7 +106,7 @@ for location in jsonFormat["features"]:
         continue
 
 
-file1 = open("/home/crescent-p/WhereISmyBus/apps/data/polygon_data_nitc.geojson", mode='r')
+file1 = open("apps/data/polygon_data_nitc.geojson", mode='r')
 jsonFormat = json.load(file1)
 polygonLocations = []
 
