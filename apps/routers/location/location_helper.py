@@ -100,8 +100,8 @@ pointLocations = {}
 for location in jsonFormat["features"]:
     try:
         if location["properties"]["name"]:
-            pointLocations[Coordinates(latitude=location["geometry"]["coordinates"][0],
-                        longitude=location["geometry"]["coordinates"][1])] = location["properties"]["name"]
+            pointLocations[Coordinates(latitude=location["geometry"]["coordinates"][1],
+                        longitude=location["geometry"]["coordinates"][0])] = str(location["properties"]["name"])
     except:
         continue
 
@@ -116,7 +116,7 @@ for building in jsonFormat["features"]:
     if str(building["geometry"]["type"]) != "Polygon":
             continue
     for coordiante in building["geometry"]["coordinates"][0]:
-        listOfCoordinates.append(Coordinates(latitude=coordiante[0],longitude=coordiante[1]))
+        listOfCoordinates.append(Coordinates(latitude=coordiante[1],longitude=coordiante[0]))
     polygonLocations.append(listOfCoordinates)
 
 
@@ -195,7 +195,7 @@ MainBuildingFront: List[Coordinates] = [
 ]
 
 
-parkingSpace: List[List[Coordinates]] = [LH, MBH, ChemicalBuilding, MainBuildingFront, SOMS]
+parkingSpace: List[List[Coordinates]] = [LH, MBH, ChemicalBuilding, SOMS]
 
 def isInside(point: Coordinates, polygon: List[Coordinates]) -> bool:
     x, y = point.latitude, point.longitude
@@ -279,10 +279,12 @@ def find_closest_location(coordinate: Coordinates) -> str:
         if distance < min_distance:
             min_distance = distance
             closest_location = loc
+    try:
+        return map_from_coordinate_to_string[closest_location] if closest_location else "Unknown"
+    except:
+        return pointLocations[closest_location] if closest_location else "Unknown"
 
-
-    return map_from_coordinate_to_string[closest_location] if closest_location else "Unknown"
-
+    
 
 LHBusLandMarks = ["Ladies Hostel NITC", "Main Canteen (Swadishtam)", "SOMS", "Ladies Hostel", "MBA Hostel NIT", "NITC Guest House"]
 MBHLandMarks = ["NITC Library", "C Gate", "Mega Boys Hostel", "Mega Boys Hostel Gate", "Kattangal", "NIT mega hostel phase 2", "Mega Hostel Boys"]

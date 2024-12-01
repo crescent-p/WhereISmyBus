@@ -59,7 +59,7 @@ async def remove_redundant_buses():
                 if elapsed_time.total_seconds() > confidence * allowed_time:
                     busArray.remove(bus)
             redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))  
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
