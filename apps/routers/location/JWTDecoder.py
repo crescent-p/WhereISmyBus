@@ -5,15 +5,24 @@ import requests
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
+from ...database import r as redis
+
+
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 CLIENT_ID = "442072746362-s30fj5ovvkp8ags8d0s8h658t4actmo9.apps.googleusercontent.com"
 
 def get_google_public_keys():
     # Fetch Google's public keys
-    response = requests.get(GOOGLE_CERTS_URL)
-    if response.status_code != 200:
-        raise Exception("Failed to fetch public keys")
-    return response.json()["keys"]
+    cache = redis.get("keys")
+    if cache:
+        response = json.loads(cache)
+        return response
+    else:
+        response = requests.get(GOOGLE_CERTS_URL)
+        if response.status_code != 200:
+            raise Exception("Failed to fetch public keys")
+        redis.set("keys", json.dumps(response.json()["keys"]), ex=200)
+        return response.json()["keys"]
 
 def construct_rsa_public_key(key_data):
     # Construct RSA public key from Google's keys (n, e)
