@@ -10,7 +10,7 @@
     2) if confidence is high and is at parking space, give extra time before removing.
     3) dont allow to upload near MBH LH and major buildings
     4) add a set to busentry that tracks the current riders. Should clear the set if inside parking area.
-
+    5) add timestamp ordering. dont allow old uploads to modify data. (should help with slow packet upload)
 
 # app side
     1) check if user in LH or MBH or any building. If inside building dont send data.

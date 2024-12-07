@@ -286,7 +286,7 @@ def find_closest_location(coordinate: Coordinates) -> str:
 
     
 
-LHBusLandMarks = ["Ladies Hostel NITC", "Main Canteen (Swadishtam)", "SOMS", "Ladies Hostel", "MBA Hostel NIT", "NITC Guest House"]
+LHBusLandMarks = ["LH Gate","Bottom LH Hostel NIT", "Upper LH NIT hostel", "Ladies Hostel NITC", "Main Canteen (Swadishtam)", "SOMS", "Ladies Hostel", "MBA Hostel NIT", "NITC Guest House"]
 MBHLandMarks = ["NITC Library", "C Gate", "Mega Boys Hostel", "Mega Boys Hostel Gate", "Kattangal", "NIT mega hostel phase 2", "Mega Hostel Boys"]
 
 def nameResolve(coordinate: Coordinates) -> str:
