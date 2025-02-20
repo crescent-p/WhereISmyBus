@@ -1,0 +1,1 @@
+types = ["LOST AND FOUND", "EVENTS", "MARKETPLACE"]

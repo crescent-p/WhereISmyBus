@@ -1,6 +1,6 @@
 import string
 from typing import Dict, List
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, UploadFile, File, WebSocket, WebSocketDisconnect, status
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, UploadFile, File, WebSocket, WebSocketDisconnect, status, types
 from fastapi.responses import FileResponse
 import shutil
 import os
@@ -104,22 +104,28 @@ async def get_post_by_uuid(uuid: str, db: Session = Depends(get_db)):
 
 
 @router.post("/comment", status_code=status.HTTP_201_CREATED)
-async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = Depends(get_db), redis: Session = Depends(get_redis)):
+async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = Depends(get_db)):
     if not db.query(models.Post).where(models.Post.uuid == comment.post_uuid).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="The post with said UUID is not present")
     try:
         new_comment = models.Comment(**comment.model_dump())
-        print(new_comment.user_email)
         db.add(new_comment)
         db.commit()
         db.refresh(new_comment)
-        redis.publish(get_post_channel(comment.post_uuid), comment.post_uuid)
         return new_comment
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
+    
+@router.get("/miniposts", status_code=status.HTTP_302_FOUND, response_model=List[schemas.MiniPost])
+async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
+    mini_posts: List[schemas.MiniPost] = []
+    post_types = db.query(models.Post.type).distinct().all()
+    for post_type in post_types:
+        mini_post = db.query(models.Post).where(models.Post.type == post_type).limit(limit).all()
+        mini_posts.extend([schemas.MiniPost(**post.to_dict()) for post in mini_post])
+    return mini_posts
 
 @router.post("/post", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 async def create_post(post: schemas.Post, db: Session = Depends(get_db)):

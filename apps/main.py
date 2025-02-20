@@ -34,8 +34,8 @@ async def test():
 @app.on_event("startup")
 async def startup_event():
     # Schedule the coroutine on startup
-    asyncio.create_task(remove_redundant_buses())
-    asyncio.create_task(social.redis_listener())
+    await asyncio.create_task(remove_redundant_buses())
+    await asyncio.create_task(social.redis_listener())
 
 app.include_router(locations.router)
 app.include_router(social.router)
