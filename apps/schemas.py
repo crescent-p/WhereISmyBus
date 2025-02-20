@@ -10,12 +10,21 @@ class UpdatedLocation(BaseModel):
 class Token(BaseModel):
     token: str
 
+
 class Comment(BaseModel):
-    id : int
-    post_uuid : str
-    user_email : str
-    text : str
-    datetime : datetime
+    id: int
+    post_uuid: str
+    user_email: str
+    text: str
+    datetime: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class GetComment(BaseModel):
+    body: Optional[List[Comment]] = None
+    cursor: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -38,6 +47,7 @@ class Post(BaseModel):
 class MiniPost(BaseModel):
     type: str
     uuid: str
+    heading: str
     imageUrl: Optional[str] = None
     image: Optional[bytes] = None
 

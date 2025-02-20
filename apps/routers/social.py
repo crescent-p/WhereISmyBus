@@ -1,5 +1,6 @@
+from datetime import datetime
 import string
-from typing import Dict, List
+from typing import Dict, List, Optional
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, UploadFile, File, WebSocket, WebSocketDisconnect, status, types
 from fastapi.responses import FileResponse
 import shutil
@@ -117,15 +118,24 @@ async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = De
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    
-@router.get("/miniposts", status_code=status.HTTP_302_FOUND, response_model=List[schemas.MiniPost])
+
+
+@router.get("/miniposts", status_code=status.HTTP_302_FOUND, response_model=Dict[str, List[schemas.MiniPost]])
 async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
-    mini_posts: List[schemas.MiniPost] = []
+    mini_posts: Dict[str, schemas.MiniPost] = {}
     post_types = db.query(models.Post.type).distinct().all()
     for post_type in post_types:
-        mini_post = db.query(models.Post).where(models.Post.type == post_type).limit(limit).all()
-        mini_posts.extend([schemas.MiniPost(**post.to_dict()) for post in mini_post])
+        mini_post = db.query(models.Post).where(
+            models.Post.type == post_type[0]).limit(limit).all()
+        posts = []
+        for post in mini_post:
+            posts.append(schemas.MiniPost(heading=post.description,  # Use dot notation to access attributes
+                                          type=post.type,
+                                          uuid=post.uuid,
+                                          imageUrl=post.high_res_image_url))
+        mini_posts[post_type[0]] = (posts)
     return mini_posts
+
 
 @router.post("/post", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 async def create_post(post: schemas.Post, db: Session = Depends(get_db)):
@@ -133,9 +143,21 @@ async def create_post(post: schemas.Post, db: Session = Depends(get_db)):
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
-    await redis.publish("new_posts_channel", post.post_id)
     return new_post
 
+
+@router.get("/comment", status_code=status.HTTP_302_FOUND, response_model=schemas.GetComment)
+async def get_comments(post_id: str, cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
+    comments = db.query(models.Comment).order_by(models.Comment.datetime)
+    if cursor:
+        comments = comments.where(
+            models.Comment.post_uuid == post_id, models.Comment.datetime > cursor)
+    else:
+        comments = comments.where(models.Comment.post_uuid == post_id)
+    comments_list = comments.limit(limit).all()
+    result = schemas.GetComment(
+        body=comments_list, cursor=comments_list[-1].datetime if comments_list else None)
+    return result
 
 # get posts based on type
 # get first 10 miniposts from each type

@@ -28,7 +28,7 @@ class Post(Base):
 
 class Comment(Base):
     __tablename__ = "comment"
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     post_uuid = Column(String, ForeignKey("post.uuid"), nullable=False)
     user_email = Column(String, ForeignKey("users.email"), nullable=False)
     text = Column(String, nullable=False)
