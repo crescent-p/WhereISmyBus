@@ -10,7 +10,6 @@
 # router = APIRouter(prefix="/students", tags=['students'])
 
 
-
 # # @router.get('/{id}', status_code=status.HTTP_302_FOUND, response_model=List[schemas.StudentsOut])
 # # async def get_student_by_id(id: int, db: Session = Depends(get_db)):
 # #     query_res = db.query(models.Students).where(models.Students.id_no == id).first()
@@ -42,7 +41,7 @@
 #         else:
 #             user.status = "Temporary"
 #     new_user = models.Students(**user.model_dump())
-    
+
 #     db.add(new_user)
 #     db.commit()
 #     db.refresh(new_user)
@@ -56,11 +55,10 @@
 
 #     if not student.first():
 #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="That student doesn't exist!")
-    
+
 #     deleted_student = student.first()
 
-#     student.delete() 
+#     student.delete()
 #     db.commit()
 
 #     return deleted_student
-

@@ -6,18 +6,64 @@ from pydantic import BaseModel, EmailStr, conint
 class UpdatedLocation(BaseModel):
     message: str
 
+
 class Token(BaseModel):
     token: str
+
+class Comment(BaseModel):
+    id : int
+    post_uuid : str
+    user_email : str
+    text : str
+    datetime : datetime
+
+    class Config:
+        from_attributes = True
+
+
+class Post(BaseModel):
+    user_email: str
+    type: str
+    uuid: str
+    high_res_image_url: Optional[str] = None
+    image: Optional[bytes] = None
+    description: str
+    likes: int
+    datetime: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class MiniPost(BaseModel):
+    type: str
+    uuid: str
+    imageUrl: Optional[str] = None
+    image: Optional[bytes] = None
+
+    class Config:
+        from_attributes = True
+
+#      String userEmail;
+#   final String type;
+#   final String uuid;
+#   String? highResImageUrl;
+#   Uint8List? image;
+#   final String description;
+#   final int likes;
+#   DateTime datetime;
 
 
 class Authenticated(BaseModel):
     message: str
+
 
 class User(BaseModel):
     id: int
     name: str
     email: EmailStr
     photo_url: str
+
 
 class LocationData(BaseModel):
     token: str
@@ -28,6 +74,7 @@ class LocationData(BaseModel):
     # datetime: datetime
     location_accuracy: float
     satelite_count: int
+
 
 class Bus(BaseModel):
     latitude: float
@@ -41,7 +88,6 @@ class Bus(BaseModel):
     confidence: float
 
 
-        
 class BusList(BaseModel):
     buses: list[Bus]
     active_users: int
@@ -51,7 +97,7 @@ class BusList(BaseModel):
 #     id: int
 #     email: EmailStr
 #     created_at: datetime
-    
+
 
 #     class Config:
 #         from_attributes = True
@@ -71,14 +117,14 @@ class BusList(BaseModel):
 #     created_at: Optional[datetime]
 #     user_id: int
 #     owner: UserResponse
-    
+
 #     class Config:
 #         from_attributes = True
 
 # class PostOut(BaseModel):
 #     Post: Post
 #     votes: int
-    
+
 #     class Config:
 #         from_attributes = True
 
@@ -89,6 +135,7 @@ class BusList(BaseModel):
 
 class Token(BaseModel):
     token: str
+
 
 class TokenData(BaseModel):
     id: Optional[int] = None
@@ -118,7 +165,7 @@ class TokenData(BaseModel):
 
 #     class Config:
 #         from_attributes = True
-        
+
 # class Books(BaseModel):
 #     book_name: str
 #     author_id: int
@@ -136,7 +183,7 @@ class TokenData(BaseModel):
 #     book_id: int
 
 # class IssuesOut(Issues):
-#     student: StudentsOut 
+#     student: StudentsOut
 #     book: BooksOut
 #     issue_date: datetime
 #     due_date: datetime
