@@ -95,7 +95,7 @@ async def download_file(filename: str):
 # get post by uuid
 
 
-@router.get("/get_post", status_code=status.HTTP_302_FOUND, response_model=schemas.Post)
+@router.get("/get_post", status_code=status.HTTP_200_OK, response_model=schemas.Post)
 async def get_post_by_uuid(uuid: str, db: Session = Depends(get_db)):
     if not db.query(models.Post).where(models.Post.uuid == uuid).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -104,7 +104,7 @@ async def get_post_by_uuid(uuid: str, db: Session = Depends(get_db)):
     return query
 
 
-@router.post("/comment", status_code=status.HTTP_201_CREATED)
+@router.post("/comment", status_code=status.HTTP_200_OK)
 async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = Depends(get_db)):
     if not db.query(models.Post).where(models.Post.uuid == comment.post_uuid).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -120,7 +120,7 @@ async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = De
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@router.get("/miniposts", status_code=status.HTTP_302_FOUND, response_model=Dict[str, List[schemas.MiniPost]])
+@router.get("/miniposts", status_code=status.HTTP_200_OK, response_model=Dict[str, List[schemas.MiniPost]])
 async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
     mini_posts: Dict[str, schemas.MiniPost] = {}
     post_types = db.query(models.Post.type).distinct().all()
@@ -137,7 +137,7 @@ async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
     return mini_posts
 
 
-@router.post("/post", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
+@router.post("/post", status_code=status.HTTP_200_OK, response_model=schemas.Post)
 async def create_post(post: schemas.Post, db: Session = Depends(get_db)):
     new_post = models.Post(**post.dict())
     db.add(new_post)
@@ -146,7 +146,7 @@ async def create_post(post: schemas.Post, db: Session = Depends(get_db)):
     return new_post
 
 
-@router.get("/comment", status_code=status.HTTP_302_FOUND, response_model=schemas.GetComment)
+@router.get("/comment", status_code=status.HTTP_200_OK, response_model=schemas.GetComment)
 async def get_comments(post_id: str, cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
     comments = db.query(models.Comment).order_by(models.Comment.datetime)
     if cursor:
