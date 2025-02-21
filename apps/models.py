@@ -3,36 +3,43 @@ from sqlalchemy import TIMESTAMP, Boolean, Column, Float, ForeignKey, Integer, S
 from sqlalchemy.orm import relationship
 from sqlalchemy import func, Interval
 import uuid
- 
 
 
 class Users(Base):
     __tablename__ = "users"
-    email = Column(String, primary_key=True, nullable=True, unique=False)
-    name = Column(String, nullable=True)
-    created_at = Column(TIMESTAMP(timezone= True), server_default=text('now()'), nullable=False)
-    last_accessed = Column(TIMESTAMP(timezone=True), server_default=text('now()'), nullable= True)
+    email = Column(String, primary_key=True, nullable=False, unique=False)
+    name = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        server_default=text('now()'), nullable=False)
+    last_accessed = Column(TIMESTAMP(timezone=True),
+                           server_default=text('now()'), nullable=True)
     picture = Column(String, nullable=True)
+
 
 class Post(Base):
     __tablename__ = "post"
     user_email = Column(String, ForeignKey("users.email"), nullable=False)
     type = Column(String, nullable=False)
-    uuid = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), nullable=False)
+    uuid = Column(String, primary_key=True,
+                  default=lambda: str(uuid.uuid4()), nullable=False)
     high_res_image_url = Column(String, nullable=True)
-    image = Column(String, nullable=True)  # Assuming image is stored as a base64 string
+    # Assuming image is stored as a base64 string
+    image = Column(String, nullable=True)
     description = Column(String, nullable=False)
     likes = Column(Integer, default=0, nullable=False)
-    datetime = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    datetime = Column(TIMESTAMP(timezone=True),
+                      server_default=func.now(), nullable=False)
     comments = relationship("Comment", back_populates="post")
+
 
 class Comment(Base):
     __tablename__ = "comment"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     post_uuid = Column(String, ForeignKey("post.uuid"), nullable=False)
     user_email = Column(String, ForeignKey("users.email"), nullable=False)
     text = Column(String, nullable=False)
-    datetime = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    datetime = Column(TIMESTAMP(timezone=True),
+                      server_default=func.now(), nullable=False)
     post = relationship("Post", back_populates="comments")
 
 # class Admin(Base):
@@ -88,8 +95,3 @@ class Comment(Base):
 
 #     book_name = Column(String, nullable=False)
 #     ISBN = Column(String, nullable=False, primary_key=True)
-
-
-
-
-
