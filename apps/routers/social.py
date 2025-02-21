@@ -16,65 +16,65 @@ router = APIRouter(prefix="/social", tags=['social'])
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-active_connections: Dict[str, List[WebSocket]] = {}
+# active_connections: Dict[str, List[WebSocket]] = {}
 
 
-def get_post_channel(val: str):
-    return "channel" + val + "hiyaa"
+# def get_post_channel(val: str):
+#     return "channel" + val + "hiyaa"
 
 
-@router.websocket("/ws/{post_id}")
-async def add_websocket_with_postid(websocket: WebSocket, post_id: str):
+# @router.websocket("/ws/{post_id}")
+# async def add_websocket_with_postid(websocket: WebSocket, post_id: str):
 
-    await websocket.accept()
+#     await websocket.accept()
 
-    post_channel = get_post_channel(post_id)
+#     post_channel = get_post_channel(post_id)
 
-    if post_channel not in active_connections:
-        active_connections[post_channel] = []
+#     if post_channel not in active_connections:
+#         active_connections[post_channel] = []
 
-    active_connections[post_channel].append(websocket)
+#     active_connections[post_channel].append(websocket)
 
-    try:
-        while True:
-            data = await websocket.receive_text()  # Just keeping connection alive
-    except WebSocketDisconnect:
-        active_connections[post_channel].remove(websocket)
+#     try:
+#         while True:
+#             data = await websocket.receive_text()  # Just keeping connection alive
+#     except WebSocketDisconnect:
+#         active_connections[post_channel].remove(websocket)
 
 
-async def redis_listener():
-    """Listens to Redis Pub/Sub and forwards messages to WebSocket clients"""
-    pubsub = redis.pubsub()
+# async def redis_listener():
+#     """Listens to Redis Pub/Sub and forwards messages to WebSocket clients"""
+#     pubsub = redis.pubsub()
 
-    # Subscribe to an admin channel that notifies when a new post is added
-    pubsub.subscribe("new_posts_channel")
+#     # Subscribe to an admin channel that notifies when a new post is added
+#     pubsub.subscribe("new_posts_channel")
 
-    subscribed_channels = set()
+#     subscribed_channels = set()
 
-    while True:
-        message = await pubsub.get_message(ignore_subscribe_messages=True, timeout=1.0)
-        if message:
-            channel = message["channel"]
-            data = message["data"]
+#     while True:
+#         message = await pubsub.get_message(ignore_subscribe_messages=True, timeout=1.0)
+#         if message:
+#             channel = message["channel"]
+#             data = message["data"]
 
-            # If a new post is added, subscribe to its channel
-            if channel == "new_posts_channel":
-                post_id = data
-                post_channel = get_post_channel(post_id)
+#             # If a new post is added, subscribe to its channel
+#             if channel == "new_posts_channel":
+#                 post_id = data
+#                 post_channel = get_post_channel(post_id)
 
-                if post_channel not in subscribed_channels:
-                    await pubsub.subscribe(post_channel)
-                    subscribed_channels.add(post_channel)
+#                 if post_channel not in subscribed_channels:
+#                     await pubsub.subscribe(post_channel)
+#                     subscribed_channels.add(post_channel)
 
-            # If a comment is posted, send it to WebSocket clients
-            elif channel in subscribed_channels:
-                comment = data
-                if channel in active_connections:
-                    for ws in active_connections[channel]:
-                        try:
-                            await ws.send_text(comment)
-                        except:
-                            active_connections[channel].remove(ws)
+#             # If a comment is posted, send it to WebSocket clients
+#             elif channel in subscribed_channels:
+#                 comment = data
+#                 if channel in active_connections:
+#                     for ws in active_connections[channel]:
+#                         try:
+#                             await ws.send_text(comment)
+#                         except:
+#                             active_connections[channel].remove(ws)
 
 
 @router.post("/upload/")
