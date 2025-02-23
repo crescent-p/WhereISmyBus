@@ -159,5 +159,18 @@ async def get_comments(post_id: str, cursor: Optional[datetime] = None, limit: i
         body=comments_list, cursor=comments_list[-1].datetime if comments_list else None)
     return result
 
+
+@router.get("/posts_by_type", status_code=status.HTTP_200_OK, response_model=schemas.GetPostByType)
+async def get_posts_by_type(post_type: str, cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
+    if cursor:
+        qposts = db.query(models.Post).order_by(models.Post.datetime).where(
+            models.Post.type == post_type, models.Post.datetime > cursor).limit(limit).all()
+    else:
+        qposts = db.query(models.Post).order_by(models.Post.datetime).where(
+            models.Post.type == post_type).limit(limit).all()
+    post_list: List[schemas.Post] = qposts
+    res = schemas.GetPostByType(
+        posts=post_list, cursor=qposts[-1].datetime if qposts else None)
+    return res
 # get posts based on type
 # get first 10 miniposts from each type

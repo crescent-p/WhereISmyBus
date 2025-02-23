@@ -64,6 +64,11 @@ class MiniPost(BaseModel):
 #   DateTime datetime;
 
 
+class GetPostByType(BaseModel):
+    posts: Optional[List[Post]] = []
+    cursor: Optional[datetime] = None
+
+
 class Authenticated(BaseModel):
     message: str
 
