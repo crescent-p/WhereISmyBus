@@ -9,9 +9,9 @@ router = APIRouter(tags=['Authentication'])
 
 
 @router.post('/signin', status_code=status.HTTP_200_OK, response_model=schemas.Authenticated)
-async def sign_in(location: schemas.Token, db: Session = Depends(get_db)):
+async def sign_in(token: str, db: Session = Depends(get_db)):
     try:
-        decoded_token = verify_token(token=location.token)
+        decoded_token = verify_token(token=token)
         if not decoded_token:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
@@ -19,7 +19,6 @@ async def sign_in(location: schemas.Token, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
 
-    print(decoded_token)
     query = db.query(models.Users).where(
         models.Users.sub == decoded_token["sub"])
     if not query.first():
