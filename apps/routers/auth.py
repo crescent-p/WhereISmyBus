@@ -1,4 +1,5 @@
 from datetime import datetime
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, status, HTTPException
 from apps import models, schemas
@@ -7,9 +8,11 @@ from apps.routers.location.JWTDecoder import verify_token
 
 router = APIRouter(tags=['Authentication'])
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @router.post('/signin', status_code=status.HTTP_200_OK, response_model=schemas.Authenticated)
-async def sign_in(token: str, db: Session = Depends(get_db)):
+async def sign_in(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     try:
         decoded_token = verify_token(token=token)
         if not decoded_token:
@@ -23,7 +26,7 @@ async def sign_in(token: str, db: Session = Depends(get_db)):
         models.Users.sub == decoded_token["sub"])
     if not query.first():
         new_user = models.Users()
-        new_user.name = decoded_token["name"]
+        new_user.name = decoded_token["given_name"]
         new_user.picture = decoded_token["picture"]
         new_user.created_at = datetime.now()
         new_user.last_accessed = datetime.now()

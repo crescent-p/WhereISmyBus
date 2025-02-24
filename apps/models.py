@@ -14,6 +14,7 @@ class Users(Base):
     last_accessed = Column(TIMESTAMP(timezone=True),
                            server_default=text('now()'), nullable=True)
     picture = Column(String, nullable=True)
+    sub = Column(String, unique=True, nullable=True)
 
 
 class Post(Base):
