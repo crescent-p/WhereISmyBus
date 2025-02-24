@@ -22,6 +22,12 @@ class Comment(BaseModel):
         from_attributes = True
 
 
+class CreateComment(BaseModel):
+    post_uuid: str
+    user_email: str
+    text: str
+
+
 class GetComment(BaseModel):
     body: Optional[List[Comment]] = None
     cursor: Optional[datetime] = None

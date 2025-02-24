@@ -105,7 +105,7 @@ async def get_post_by_uuid(uuid: str, db: Session = Depends(get_db)):
 
 
 @router.post("/comment", status_code=status.HTTP_200_OK)
-async def create_commnet_with_post_id(comment: schemas.Comment, db: Session = Depends(get_db)):
+async def create_comment_with_post_id(comment: schemas.CreateComment, db: Session = Depends(get_db)):
     if not db.query(models.Post).where(models.Post.uuid == comment.post_uuid).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="The post with said UUID is not present")
@@ -162,6 +162,8 @@ async def get_comments(post_id: str, cursor: Optional[datetime] = None, limit: i
 
 @router.get("/posts_by_type", status_code=status.HTTP_200_OK, response_model=schemas.GetPostByType)
 async def get_posts_by_type(post_type: str, cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
+    print(db.query(models.Post).order_by(models.Post.datetime).where(
+        models.Post.type == post_type).limit(limit))
     if cursor:
         qposts = db.query(models.Post).order_by(models.Post.datetime).where(
             models.Post.type == post_type, models.Post.datetime > cursor).limit(limit).all()
