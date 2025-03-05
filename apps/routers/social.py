@@ -129,10 +129,12 @@ async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
             models.Post.type == post_type[0]).limit(limit).all()
         posts = []
         for post in mini_post:
-            posts.append(schemas.MiniPost(heading=post.description,  # Use dot notation to access attributes
-                                          type=post.type,
-                                          uuid=post.uuid,
-                                          imageUrl=post.high_res_image_url))
+            posts.append(schemas.MiniPost(  # Use dot notation to access attributes
+                type=post.type,
+                uuid=post.uuid,
+                imageUrl=post.high_res_image_url,
+                heading=post.heading,
+                venue=post.venue))
         mini_posts[post_type[0]] = (posts)
     return mini_posts
 
@@ -184,8 +186,7 @@ async def get_notifications(cursor: Optional[datetime] = None, limit: int = 10, 
     if cursor:
         notifications = notifications.where(
             models.Notification.created_at > cursor)
-    notifications_list = notifications.limit(limit).all()
-    return notifications_list
+    return notifications.limit(limit).all()
 
 
 @router.post("/notification", status_code=status.HTTP_200_OK, response_model=schemas.NotificationOut)

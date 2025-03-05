@@ -22,7 +22,7 @@ class CreateNotification(BaseModel):
 
 class NotificationOut(BaseModel):
     id: int
-    message: int
+    message: str
     created_at: datetime
 
 
@@ -60,6 +60,9 @@ class Post(BaseModel):
     description: str
     likes: int
     datetime: datetime
+    heading: str
+    event_timing: str
+    venue: str
 
     class Config:
         from_attributes = True
@@ -69,6 +72,7 @@ class MiniPost(BaseModel):
     type: str
     uuid: str
     heading: str
+    venue: str
     imageUrl: Optional[str] = None
     image: Optional[bytes] = None
 
