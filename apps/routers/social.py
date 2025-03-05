@@ -148,7 +148,8 @@ async def create_post(post: schemas.Post, db: Session = Depends(get_db)):
 
 @router.get("/comment", status_code=status.HTTP_200_OK, response_model=schemas.GetComment)
 async def get_comments(post_id: str, cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
-    comments = db.query(models.Comment).order_by(models.Comment.datetime)
+    comments = db.query(models.Comment).order_by(
+        models.Comment.datetime.desc())
     if cursor:
         comments = comments.where(
             models.Comment.post_uuid == post_id, models.Comment.datetime > cursor)
