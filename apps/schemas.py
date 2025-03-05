@@ -20,10 +20,15 @@ class CreateNotification(BaseModel):
         from_attributes = True
 
 
-class NotificationOut(BaseModel):
+class Notification(BaseModel):
     id: int
     message: str
     created_at: datetime
+
+
+class NotificationOut(BaseModel):
+    notifications: List[Notification]
+    cursor: datetime
 
 
 class Comment(BaseModel):

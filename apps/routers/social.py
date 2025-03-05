@@ -179,14 +179,31 @@ async def get_posts_by_type(post_type: str, cursor: Optional[datetime] = None, l
     return res
 
 
-@router.get("/notification", status_code=status.HTTP_200_OK, response_model=List[schemas.NotificationOut])
+def convert_to_pydantic(notification: models.Notification) -> schemas.Notification:
+    return schemas.Notification(
+        id=notification.id,
+        message=notification.message,
+        created_at=notification.created_at,
+    )
+
+
+@router.get("/notification", status_code=status.HTTP_200_OK, response_model=schemas.NotificationOut)
 async def get_notifications(cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
     notifications = db.query(models.Notification).order_by(
         models.Notification.created_at.desc())
     if cursor:
         notifications = notifications.where(
             models.Notification.created_at > cursor)
-    return notifications.limit(limit).all()
+    # In your endpoint
+    notifications_list = notifications.limit(limit).all()
+    pydantic_notifications = [
+        convert_to_pydantic(n) for n in notifications_list]
+
+    result = schemas.NotificationOut(
+        notifications=pydantic_notifications,
+        cursor=notifications_list[-1].created_at if notifications_list else None,
+    )
+    return result
 
 
 @router.post("/notification", status_code=status.HTTP_200_OK, response_model=schemas.NotificationOut)
