@@ -175,5 +175,25 @@ async def get_posts_by_type(post_type: str, cursor: Optional[datetime] = None, l
     res = schemas.GetPostByType(
         posts=post_list, cursor=qposts[-1].datetime if qposts else None)
     return res
+
+
+@router.get("/notification", status_code=status.HTTP_200_OK, response_model=List[schemas.NotificationOut])
+async def get_notifications(cursor: Optional[datetime] = None, limit: int = 10, db: Session = Depends(get_db)):
+    notifications = db.query(models.Notification).order_by(
+        models.Notification.created_at.desc())
+    if cursor:
+        notifications = notifications.where(
+            models.Notification.created_at > cursor)
+    notifications_list = notifications.limit(limit).all()
+    return notifications_list
+
+
+@router.post("/notification", status_code=status.HTTP_200_OK, response_model=schemas.NotificationOut)
+async def create_notification(notification: schemas.CreateNotification, db: Session = Depends(get_db)):
+    new_notification = models.Notification(**notification.dict())
+    db.add(new_notification)
+    db.commit()
+    db.refresh(new_notification)
+    return new_notification
 # get posts based on type
 # get first 10 miniposts from each type

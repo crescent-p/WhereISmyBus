@@ -56,6 +56,9 @@ class Post(Base):
                   default=lambda: str(uuid.uuid4()), nullable=False)
     high_res_image_url = Column(String, nullable=True)
     image = Column(String, nullable=True)
+    heading = Column(String, nullable=True)
+    event_timing = Column(String, nullable=True)
+    venue = Column(String, nullable=True)
     description = Column(String, nullable=False)
     likes = Column(Integer, default=0, nullable=False)
     datetime = Column(TIMESTAMP(timezone=True),

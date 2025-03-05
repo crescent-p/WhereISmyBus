@@ -11,6 +11,21 @@ class Token(BaseModel):
     token: str
 
 
+class CreateNotification(BaseModel):
+    user_email: str
+    message: str
+    read: bool = False
+
+    class Config:
+        from_attributes = True
+
+
+class NotificationOut(BaseModel):
+    id: int
+    message: int
+    created_at: datetime
+
+
 class Comment(BaseModel):
     id: int
     post_uuid: str
