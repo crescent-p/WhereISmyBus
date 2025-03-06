@@ -125,7 +125,7 @@ async def get_mini_posts(limit: int, db: Session = Depends(get_db)):
     mini_posts: Dict[str, schemas.MiniPost] = {}
     post_types = db.query(models.Post.type).distinct().all()
     for post_type in post_types:
-        mini_post = db.query(models.Post).where(
+        mini_post = db.query(models.Post).order_by(models.Post.datetime.desc()).where(
             models.Post.type == post_type[0]).limit(limit).all()
         posts = []
         for post in mini_post:
@@ -209,9 +209,12 @@ async def get_notifications(cursor: Optional[datetime] = None, limit: int = 10, 
 @router.post("/notification", status_code=status.HTTP_200_OK, response_model=schemas.NotificationOut)
 async def create_notification(notification: schemas.CreateNotification, db: Session = Depends(get_db)):
     new_notification = models.Notification(**notification.dict())
+
     db.add(new_notification)
     db.commit()
     db.refresh(new_notification)
     return new_notification
+
+
 # get posts based on type
 # get first 10 miniposts from each type

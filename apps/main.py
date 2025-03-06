@@ -8,10 +8,16 @@ from apps.database import engine
 from apps.routers import students, auth
 from apps.routers.location import locations
 from apps.routers import social
-
+from fastapi import FastAPI
+import firebase_admin
+from firebase_admin import messaging, credentials
 from apps.routers.location.locations import remove_redundant_buses
 
 models.Base.metadata.create_all(bind=engine)
+
+cred = credentials.Certificate(
+    "ogs-app-175fe-firebase-adminsdk-fbsvc-1136052177.json")
+firebase_admin.initialize_app(cred)
 
 app = FastAPI()
 
