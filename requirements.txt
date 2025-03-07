@@ -4,6 +4,7 @@ anyio==4.6.2.post1
 async-timeout==5.0.1
 asyncio==3.4.3
 bcrypt==4.2.0
+bidict==0.23.1
 CacheControl==0.14.2
 cachetools==5.5.0
 certifi==2024.8.30
@@ -62,14 +63,17 @@ Pygments==2.18.0
 PyJWT==2.10.1
 pyparsing==3.2.1
 python-dotenv==1.0.1
+python-engineio==4.11.2
 python-jose==3.3.0
 python-multipart==0.0.12
+python-socketio==5.12.1
 PyYAML==6.0.2
 redis==5.2.0
 requests==2.32.3
 rich==13.9.2
 rsa==4.9
 shellingham==1.5.4
+simple-websocket==1.1.0
 six==1.16.0
 sniffio==1.3.1
 SQLAlchemy==2.0.36
@@ -83,3 +87,4 @@ uvicorn==0.31.1
 uvloop==0.20.0
 watchfiles==0.24.0
 websockets==13.1
+wsproto==1.2.0

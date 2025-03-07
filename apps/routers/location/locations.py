@@ -1,5 +1,8 @@
-
-
+from apps.routers.location.location_helper import BusArrayEntry, Coordinates, DistIndex, find_closest_location, isInParkingArea, isInsideBuilding, isInsideNITC, nameResolve
+from typing import List, Set
+from datetime import datetime
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from typing import List
 from cmath import sqrt
 from datetime import datetime, time
 from typing import List, Optional
@@ -21,74 +24,120 @@ from ...database import r as redis
 router = APIRouter(prefix="/locations", tags=['locations'])
 
 # an array of objects A
-# A -> has latitude longitude 
-from datetime import datetime
-from typing import List, Set
-
-from apps.routers.location.location_helper import BusArrayEntry, Coordinates, DistIndex, find_closest_location, isInParkingArea, isInsideBuilding, isInsideNITC, nameResolve
+# A -> has latitude longitude
 
 
-
-
-allowed_time = 1500 # seconds
+allowed_time = 1500  # seconds
 
 busArray: List[BusArrayEntry] = []
 
 
-#if inside parking space add extra time delay
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_message(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
+
+# Endpoint for subscribing to the WebSocket
+
+
+@router.websocket("/subscribe")
+async def subscribe(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Keep the connection alive or process incoming messages if needed
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
+# Endpoint for sending data to all subscribers
+
+
+@router.websocket("/send")
+async def send_data(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await manager.send_message(data)
+            await websocket.send_text(f"Received: {data}")
+    except WebSocketDisconnect:
+        print("Client disconnected")
+
+
+# if inside parking space add extra time delay
 
 async def remove_redundant_buses():
     while True:
         busArrayjson = redis.get("busarray")
         if busArrayjson:
-            busArray: List[BusArrayEntry] = [BusArrayEntry(**bus) for bus in json.loads(busArrayjson)]
+            busArray: List[BusArrayEntry] = [BusArrayEntry(
+                **bus) for bus in json.loads(busArrayjson)]
         else:
             busArray: List[BusArrayEntry] = []
         if busArray:
             for bus in busArray:
                 allowed_time = 1500
-                possibleName = nameResolve(Coordinates(latitude=bus.latitude, longitude=bus.longitude))
+                possibleName = nameResolve(Coordinates(
+                    latitude=bus.latitude, longitude=bus.longitude))
                 if possibleName != "Unknown":
                     bus.name = possibleName
                 if isInParkingArea(coordinate=Coordinates(bus.latitude, bus.longitude)):
                     allowed_time = 3000
                     bus.contributors.clear()
-                #Sigmoid fucntion to scale up on increased confidence, rises slowly and then very fast.
+                # Sigmoid fucntion to scale up on increased confidence, rises slowly and then very fast.
                 confidence = 1/(1 + pow(25, -7*((bus.confidence/100) - 0.2)))
                 elapsed_time = datetime.now() - datetime.fromisoformat(bus.last_updated)
                 if elapsed_time.total_seconds() > confidence * allowed_time:
                     busArray.remove(bus)
-            redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))  
+            redis.set("busarray", json.dumps(
+                [bus.to_dict() for bus in busArray]))
         await asyncio.sleep(5)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.get('/', status_code=status.HTTP_200_OK, response_model=schemas.BusList)
-async def get_bus_locations(token:str = Depends(oauth2_scheme), redis: Session = Depends(get_redis)):
+async def get_bus_locations(token: str = Depends(oauth2_scheme), redis: Session = Depends(get_redis)):
     try:
         decoded_token = verify_token(token=token)
         if not decoded_token:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
 
-    #check if present in redis
+    # check if present in redis
     cache = redis.get("buslist")
     if cache:
         return json.loads(cache)
     busArrayjson = redis.get("busarray")
     if busArrayjson:
-        busArray: List[BusArrayEntry] = [BusArrayEntry(**bus) for bus in json.loads(busArrayjson)]
+        busArray: List[BusArrayEntry] = [BusArrayEntry(
+            **bus) for bus in json.loads(busArrayjson)]
     else:
         busArray: List[BusArrayEntry] = []
-   
+
     total_contributors: Set[str] = set()
-    
+
     for bus in busArray:
         total_contributors.update(bus.contributors)
 
-
-    #add to redis 
+    # add to redis
     jsonBusList = {
         "buses": [bus.to_dict() for bus in busArray],
         "active_users": len(total_contributors)
@@ -97,17 +146,19 @@ async def get_bus_locations(token:str = Depends(oauth2_scheme), redis: Session =
     return jsonBusList
 
 
-
 @router.post('/', status_code=status.HTTP_200_OK, response_model=schemas.UpdatedLocation)
 async def set_bus_locations(location: schemas.LocationData, redis: Session = Depends(get_redis), db: Session = Depends(get_db)):
     try:
         decoded_token = verify_token(token=location.token)
         if not decoded_token:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
-    
-    query = db.query(models.Users).where(models.Users.sub == decoded_token["sub"])
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Eda eda poda")
+
+    query = db.query(models.Users).where(
+        models.Users.sub == decoded_token["sub"])
     if not query.first():
         new_user = models.Users()
         new_user.name = decoded_token["name"]
@@ -123,15 +174,17 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         query_res.last_accessed = datetime.now()
         db.commit()
 
-    coordinate = Coordinates(latitude=location.latitude, longitude=location.longitude)
+    coordinate = Coordinates(latitude=location.latitude,
+                             longitude=location.longitude)
 
-    if not isInsideNITC(coordinate= coordinate) or location.speed < 3 or isInsideBuilding(coordinate=coordinate):
-        
-        return {"message" : "Doesn't meet criteria to upload the location"}
+    if not isInsideNITC(coordinate=coordinate) or location.speed < 3 or isInsideBuilding(coordinate=coordinate):
+
+        return {"message": "Doesn't meet criteria to upload the location"}
 
     busArrayjson = redis.get("busarray")
     if busArrayjson:
-        busArray: List[BusArrayEntry] = [BusArrayEntry(**bus) for bus in json.loads(busArrayjson)]
+        busArray: List[BusArrayEntry] = [BusArrayEntry(
+            **bus) for bus in json.loads(busArrayjson)]
     else:
         busArray: List[BusArrayEntry] = []
 
@@ -142,20 +195,22 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         previous_contributor = False
         if str(decoded_token["sub"]) in i.contributors:
             previous_contributor = True
- 
+
         if dist < 200:
-            possibleLocation.append(DistIndex(dist=dist, index=index, previous_contributor=previous_contributor))
+            possibleLocation.append(
+                DistIndex(dist=dist, index=index, previous_contributor=previous_contributor))
 
     if not possibleLocation:
         entry = BusArrayEntry(
             latitude=location.latitude,
             longitude=location.longitude,
             speed=location.speed,
-            created_at= datetime.now(),
+            created_at=datetime.now(),
             last_updated=datetime.now(),
             contributors={str(decoded_token["sub"])},
             no_of_contributors=1,
-            location=find_closest_location(Coordinates(latitude=location.latitude, longitude=location.longitude)),
+            location=find_closest_location(Coordinates(
+                latitude=location.latitude, longitude=location.longitude)),
             confidence=1,
             name="Unknown"
         )
@@ -174,21 +229,13 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
         busArray[index].longitude = location.longitude
         busArray[index].last_updated = datetime.now()
         busArray[index].speed = location.speed
-        busArray[index].location = find_closest_location(Coordinates(location.latitude, location.longitude))
+        busArray[index].location = find_closest_location(
+            Coordinates(location.latitude, location.longitude))
         busArray[index].contributors.add(str(decoded_token["sub"]))
-        busArray[index].no_of_contributors = len(busArray[index].contributors) 
-        
+        busArray[index].no_of_contributors = len(busArray[index].contributors)
 
     redis.set("busarray", json.dumps([bus.to_dict() for bus in busArray]))
     return {"message": "successfully added"}
-
-
-
-
-
-
-
-
 
 
 # @router.get('/{id}', status_code=status.HTTP_302_FOUND, response_model=List[schemas.StudentsOut])
@@ -222,7 +269,7 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
 #         else:
 #             user.status = "Temporary"
 #     new_user = models.Students(**user.model_dump())
-    
+
 #     db.add(new_user)
 #     db.commit()
 #     db.refresh(new_user)
@@ -236,11 +283,10 @@ async def set_bus_locations(location: schemas.LocationData, redis: Session = Dep
 
 #     if not student.first():
 #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="That student doesn't exist!")
-    
+
 #     deleted_student = student.first()
 
-#     student.delete() 
+#     student.delete()
 #     db.commit()
 
 #     return deleted_student
-
