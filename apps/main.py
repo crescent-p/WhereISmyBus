@@ -1,5 +1,6 @@
 
 # setting up the database. Creating the table and all
+import logging
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 from fastapi import Depends, FastAPI, status
@@ -17,6 +18,12 @@ from apps.routers.location.locations import remove_redundant_buses
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.FileHandler("service.log"), logging.StreamHandler()]
+)
 
 # Configure CORS
 app.add_middleware(
