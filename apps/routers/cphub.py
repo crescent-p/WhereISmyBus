@@ -29,7 +29,7 @@ async def sign_up(data: schemas.SignUp, db: Session = Depends(get_db)):
             return HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail="User already exists")
         return schemas.Token(token=str(create_access_token(data.dict())))
     except Exception:
-        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, status=str(Exception))
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail == str(Exception))
 
 
 @router.get('/signin', status_code=status.HTTP_200_OK, response_model=schemas.Token)
