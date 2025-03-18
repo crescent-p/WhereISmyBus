@@ -2,11 +2,12 @@
 # setting up the database. Creating the table and all
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
-from fastapi import FastAPI, status
+from fastapi import Depends, FastAPI, status
+from requests import session
 from apps import models
-from apps.database import engine
+from apps.database import engine, get_db
 from apps.routers import students, auth
-from apps.routers.location import locations
+from apps.routers import cphub
 from apps.routers import social
 from fastapi import FastAPI
 import firebase_admin
@@ -14,10 +15,6 @@ from firebase_admin import messaging, credentials
 from apps.routers.location.locations import remove_redundant_buses
 
 models.Base.metadata.create_all(bind=engine)
-
-cred = credentials.Certificate(
-    "ogs-app-175fe-firebase-adminsdk-fbsvc-1136052177.json")
-firebase_admin.initialize_app(cred)
 
 app = FastAPI()
 
@@ -39,10 +36,7 @@ async def test():
 
 @app.on_event("startup")
 async def startup_event():
-    # Schedule the coroutine on startup
-    asyncio.create_task(remove_redundant_buses())
-    # asyncio.create_task(social.redis_listener())
+    session = next(get_db())
+    # asyncio.create_task(models.WeeklyLeaderBoard.schedule_weekly_reset(session))
 
-app.include_router(locations.router)
-app.include_router(social.router)
-app.include_router(auth.router)
+app.include_router(cphub.router)

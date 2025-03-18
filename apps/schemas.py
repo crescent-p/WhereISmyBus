@@ -99,8 +99,23 @@ class GetPostByType(BaseModel):
     cursor: Optional[datetime] = None
 
 
-class Authenticated(BaseModel):
-    message: str
+class SignUp(BaseModel):
+    user_name: str
+    user_email: str
+    password: str
+    cf_handle: str
+    year: str
+
+    class Config:
+        from_attributes = True
+
+
+class SignIn(BaseModel):
+    user_email: str
+    password: str
+
+    class Config:
+        from_attributes = True
 
 
 class User(BaseModel):

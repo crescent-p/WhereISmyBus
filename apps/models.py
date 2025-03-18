@@ -1,85 +1,84 @@
-from .database import Base
-from sqlalchemy import TIMESTAMP, Boolean, Column, Float, ForeignKey, Integer, String, text
-from sqlalchemy.orm import relationship
-from sqlalchemy import func
-import uuid
+import time
+from sqlalchemy import TIMESTAMP, Boolean, Column, Float, ForeignKey, ForeignKeyConstraint, Integer, String, text, create_engine, event
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
+import schedule
+
+Base = declarative_base()
 
 
 class Users(Base):
-    """Model representing a user."""
     __tablename__ = "users"
 
-    email = Column(String, primary_key=True, nullable=False,
-                   unique=True)  # Set unique=True for email
-    name = Column(String, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        server_default=text('now()'), nullable=False)
-    last_accessed = Column(TIMESTAMP(timezone=True),
-                           server_default=text('now()'), nullable=True)
-    picture = Column(String, nullable=True)
-    # Set nullable=False if it must be unique
-    sub = Column(String, unique=True, nullable=False)
-    about_me = Column(String, nullable=True)
-    picture_url = Column(
-        String, nullable=True, server_default="https://cdn.vectorstock.com/i/1000v/92/16/default-profile-picture-avatar-user-icon-vector-46389216.jpg")
-    notification_id = Column(String, nullable=True)
-
-    # Corrected relationship definition
-    notifications = relationship("Notification", back_populates="user")
-    # Added relationship for posts
-    posts = relationship("Post", back_populates="user")
-    # Added relationship for comments
-    comments = relationship("Comment", back_populates="user")
+    user_email = Column(String, primary_key=True, nullable=False)
+    cf_handle = Column(String, unique=True, nullable=False, index=True)
+    user_name = Column(String, nullable=False)
+    password_hash = Column(String, nullable=False)  # Changed to password_hash
+    year = Column(String, nullable=False)
+    cf_rating = Column(Integer, server_default='0', index=True)
 
 
-class Notification(Base):
-    """Model representing a notification."""
-    __tablename__ = "notification"
+class Rating(Base):
+    __tablename__ = "ratings"
 
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_email = Column(String, ForeignKey("users.email"), nullable=False)
-    message = Column(String, nullable=False)
-    read = Column(Boolean, default=False, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True),
-                        server_default=func.now(), nullable=False)
-
-    user = relationship("Users", back_populates="notifications")
+    cf_handle = Column(String, primary_key=True)
+    total_rating = Column(Integer, server_default='0', index=True)
 
 
-class Post(Base):
-    """Model representing a post."""
-    __tablename__ = "post"
-
-    user_email = Column(String, ForeignKey("users.email"), nullable=False)
-    type = Column(String, nullable=False)
-    uuid = Column(String, primary_key=True,
-                  default=lambda: str(uuid.uuid4()), nullable=False)
-    high_res_image_url = Column(String, nullable=True)
-    image = Column(String, nullable=True)
-    heading = Column(String, nullable=True)
-    event_timing = Column(String, nullable=True)
-    venue = Column(String, nullable=True)
-    description = Column(String, nullable=False)
-    likes = Column(Integer, default=0, nullable=False)
-    datetime = Column(TIMESTAMP(timezone=True),
-                      server_default=func.now(), nullable=False)
-
-    comments = relationship("Comment", back_populates="post")
-    # Added relationship to Users
-    user = relationship("Users", back_populates="posts")
+class Contests(Base):
+    __tablename__ = "contests"
+    contest_id = Column(Integer, primary_key=True, autoincrement=True)
+    contest_name = Column(String, nullable=False, unique=True)
 
 
-class Comment(Base):
-    """Model representing a comment."""
-    __tablename__ = "comment"
+class ContestTable(Base):
+    # This will be dynamically created
+    __tablename__ = "contest_table_{contest_id}"
 
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    post_uuid = Column(String, ForeignKey("post.uuid"), nullable=False)
-    user_email = Column(String, ForeignKey("users.email"), nullable=False)
-    text = Column(String, nullable=False)
-    datetime = Column(TIMESTAMP(timezone=True),
-                      server_default=func.now(), nullable=False)
+    name = Column(String, nullable=True)
+    cf_handle = Column(String, nullable=False, primary_key=True)
+    number_of_solved_problems = Column(Integer, default=0)
+    contest_rank = Column(Integer, nullable=False)
 
-    post = relationship("Post", back_populates="comments")
-    # Added relationship to Users
-    user = relationship("Users", back_populates="comments")
+
+class WeeklyLeaderBoard(Base):
+    __tablename__ = "weeklyleaderboard"
+
+    user_email = Column(String, primary_key=True, nullable=False)
+    cf_handle = Column(String, nullable=False)
+    real_name = Column(String, nullable=True)
+    number_of_solved_problems = Column(Integer, default=0, index=True)
+
+    @classmethod
+    def reset_weekly_solved_problems(cls, session):
+        """Resets the number of solved problems to 0 for all users."""
+        session.query(cls).update({cls.number_of_solved_problems: 0})
+        session.commit()
+
+    @classmethod
+    def schedule_weekly_reset(cls, session):
+        """Schedules the weekly reset of solved problems."""
+        def weekly_reset():
+            cls.reset_weekly_solved_problems(session)
+
+        # Schedule the job to run every week at a specific time
+        schedule.every().week.do(weekly_reset)
+
+        # Keep the scheduler running
+        # while True:
+        #     schedule.run_pending()
+        #     time.sleep(1)
+
+# Dynamic table creation for contests
+
+
+@event.listens_for(Contests, 'after_insert')
+def create_contest_table(mapper, connection, target):
+    contest_table = type(f'ContestTable_{target.contest_id}', (Base,), {
+        '__tablename__': f'contest_table_{target.contest_id}',
+        'name': Column(String, nullable=True),
+        'cf_handle': Column(String, primary_key=True),
+        'number_of_solved_problems': Column(Integer, default=0),
+        'contest_rank': Column(Integer, nullable=False)
+    })
+    contest_table.__table__.create(connection)
