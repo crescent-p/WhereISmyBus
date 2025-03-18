@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, logger, status, HTTPException
@@ -55,12 +56,13 @@ async def sign_up(data: schemas.SignUp, db: Session = Depends(get_db)):
         db.refresh(new_user)  # Refresh to get database-generated fields
 
         return schemas.Token(token=str(create_access_token(data.dict())))
-    
+
     except HTTPException as he:
         db.rollback()
         raise he
     except Exception as e:
         db.rollback()
+        logging.critical(str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Could not complete registration"
